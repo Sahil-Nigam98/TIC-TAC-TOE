@@ -1,301 +1,66 @@
 # TIC TAC TOE
-// TIC TAC TOE.cpp : This file contains the 'main' function. Program execution begins and ends there.
-//
+### Logic Used in the Tic-Tac-Toe Game Code
+1. Define Constants
+   - The code defines constants to represent the players and the board:
+     - `COMPUTER = 1` 
+     - `HUMAN = 2`
+     - `SIDE = 3` (for a 3x3 board)
+     - `COMPUTERMOVE = 'O'` 
+     - `HUMANMOVE = 'X'`
 
-// A C++ Program to play tic-tac-toe 
+2. Display the Board
+   - The function `showBoard` prints the current state of the board. It uses formatted print statements to display the board in a 3x3 grid.
 
-#include<iostream> 
-using namespace std;
+3. Show Instructions
+   - The function `showInstructions` provides a guide to the player on how to choose a cell by showing which number corresponds to which cell.
 
-#define COMPUTER 1 
-constexpr auto HUMAN = 2 ;
+4. Initialize the Board
+   - The function `initialise` sets all cells in the board array to be empty (' ').
 
-#define SIDE 3 // Length of the board 
+5. Announce the Winner
+   - The function `declareWinner` takes a player (either COMPUTER or HUMAN) and prints a message indicating who won the game.
 
-// Computer will move with 'O' 
-// and human with 'X' 
-#define COMPUTERMOVE 'O' 
-#define HUMANMOVE 'X' 
+6. Check for Row Win
+   - The function `rowCrossed` checks each row to see if all cells in a row are occupied by the same player's move and are not empty. If any row is completed, it returns true.
 
-// A function to show the current board status 
-void showBoard(char board[][SIDE])
-{
+7. Check for Column Win
+   - The function `columnCrossed` checks each column to see if all cells in a column are occupied by the same player's move and are not empty. If any column is completed, it returns true.
 
-	printf("\t\t\t %c | %c | %c \n", board[0][0], board[0][1], board[0][2]);
-	printf("\t\t\t-----------\n");
-	printf("\t\t\t %c | %c | %c \n", board[1][0], board[1][1], board[1][2]);
-	printf("\t\t\t-----------\n");
-	printf("\t\t\t %c | %c | %c \n\n", board[2][0], board[2][1], board[2][2]);
-}
+8. Check for Diagonal Win
+   - The function `diagonalCrossed` checks both diagonals to see if all cells in a diagonal are occupied by the same player's move and are not empty. If any diagonal is completed, it returns true.
 
-// A function to show the instructions 
-void showInstructions()
-{
-	printf("\nChoose a cell numbered from 1 to 9 as below and play\n\n");
+9. Check if the Game is Over
+   - The function `gameOver` returns true if any row, column, or diagonal is completed by the same player's move.
 
-	printf("\t\t\t 1 | 2 | 3 \n");
-	printf("\t\t\t-----------\n");
-	printf("\t\t\t 4 | 5 | 6 \n");
-	printf("\t\t\t-----------\n");
-	printf("\t\t\t 7 | 8 | 9 \n\n");
-}
+10. Minimax Algorithm for Optimal Move Calculation
+    - The function `minimax` uses the minimax algorithm to evaluate all possible moves and returns the best score for the computer. It:
+      - Checks if the game is over and returns +1 for a human win, -1 for a computer win, or 0 for a draw.
+      - Recursively evaluates each possible move, switching between the human and computer players, and calculates the best score based on whether the current move is for the computer or the human.
 
+11. Calculate the Best Move for the Computer
+    - The function `bestMove` iterates over all cells to find the best possible move for the computer by using the `minimax` function. It returns the index of the best move.
 
-// A function to initialise the game 
-void initialise(char board[][SIDE])
-{
-	// Initially the board is empty 
-	for (int i = 0; i < SIDE; i++)
-	{
-		for (int j = 0; j < SIDE; j++)
-			board[i][j] = ' ';
-	}
-}
+12. Play the Game
+    - The function `playTicTacToe` handles the gameplay:
+      - Initializes the board and shows instructions.
+      - Enters a loop that continues until the game is over or the board is full:
+        - If it's the computer's turn:
+          - Uses `bestMove` to find the best move.
+          - Updates the board with the computer's move.
+          - Displays the board.
+          - Switches to the human's turn.
+        - If it's the human's turn:
+          - Shows available positions.
+          - Reads the human's move.
+          - Validates and updates the board if the move is valid.
+          - Displays the board.
+          - Switches to the computer's turn.
+      - After the loop, if the game is a draw, it prints "It's a draw". Otherwise, it announces the winner.
 
-// A function to declare the winner of the game 
-void declareWinner(int whoseTurn)
-{
-	if (whoseTurn == COMPUTER)
-		printf("COMPUTER has won\n");
-	else
-		printf("HUMAN has won\n");
-}
+13. Main Function to Start the Game
+    - The `main` function starts the game:
+      - Prints the game title.
+      - Asks the player if they want to go first.
+      - Starts the game by calling `playTicTacToe` with the appropriate starting player.
+      - Repeats the game until the player decides to quit.
 
-// A function that returns true if any of the row 
-// is crossed with the same player's move 
-bool rowCrossed(char board[][SIDE])
-{
-	for (int i = 0; i < SIDE; i++)
-	{
-		if (board[i][0] == board[i][1] &&
-			board[i][1] == board[i][2] &&
-			board[i][0] != ' ')
-			return (true);
-	}
-	return(false);
-}
-
-// A function that returns true if any of the column 
-// is crossed with the same player's move 
-bool columnCrossed(char board[][SIDE])
-{
-	for (int i = 0; i < SIDE; i++)
-	{
-		if (board[0][i] == board[1][i] &&
-			board[1][i] == board[2][i] &&
-			board[0][i] != ' ')
-			return (true);
-	}
-	return(false);
-}
-
-// A function that returns true if any of the diagonal 
-// is crossed with the same player's move 
-bool diagonalCrossed(char board[][SIDE])
-{
-	if (board[0][0] == board[1][1] &&
-		board[1][1] == board[2][2] &&
-		board[0][0] != ' ')
-		return(true);
-
-	if (board[0][2] == board[1][1] &&
-		board[1][1] == board[2][0] &&
-		board[0][2] != ' ')
-		return(true);
-
-	return(false);
-}
-
-// A function that returns true if the game is over 
-// else it returns a false 
-bool gameOver(char board[][SIDE])
-{
-	return(rowCrossed(board) || columnCrossed(board) || diagonalCrossed(board));
-}
-
-// Function to calculate best score
-int minimax(char board[][SIDE], int depth, bool isAI)
-{
-	int score = 0;
-	int bestScore = 0;
-	if (gameOver(board) == true)
-	{
-		if (isAI == true)
-			return -1;
-		if (isAI == false)
-			return +1;
-	}
-	else
-	{
-		if (depth < 9)
-		{
-			if (isAI == true)
-			{
-				bestScore = -999;
-				for (int i = 0; i < SIDE; i++)
-				{
-					for (int j = 0; j < SIDE; j++)
-					{
-						if (board[i][j] == ' ')
-						{
-							board[i][j] = COMPUTERMOVE;
-							score = minimax(board, depth + 1, false);
-							board[i][j] = ' ';
-							if (score > bestScore)
-							{
-								bestScore = score;
-							}
-						}
-					}
-				}
-				return bestScore;
-			}
-			else
-			{
-				bestScore = 999;
-				for (int i = 0; i < SIDE; i++)
-				{
-					for (int j = 0; j < SIDE; j++)
-					{
-						if (board[i][j] == ' ')
-						{
-							board[i][j] = HUMANMOVE;
-							score = minimax(board, depth + 1, true);
-							board[i][j] = ' ';
-							if (score < bestScore)
-							{
-								bestScore = score;
-							}
-						}
-					}
-				}
-				return bestScore;
-			}
-		}
-		else
-		{
-			return 0;
-		}
-	}
-}
-
-// Function to calculate best move
-int bestMove(char board[][SIDE], int moveIndex)
-{
-	int x = -1, y = -1;
-	int score = 0, bestScore = -999;
-	for (int i = 0; i < SIDE; i++)
-	{
-		for (int j = 0; j < SIDE; j++)
-		{
-			if (board[i][j] == ' ')
-			{
-				board[i][j] = COMPUTERMOVE;
-				score = minimax(board, moveIndex + 1, false);
-				board[i][j] = ' ';
-				if (score > bestScore)
-				{
-					bestScore = score;
-					x = i;
-					y = j;
-				}
-			}
-		}
-	}
-	return x * 3 + y;
-}
-
-// A function to play Tic-Tac-Toe 
-void playTicTacToe(int whoseTurn)
-{
-	char board[SIDE][SIDE];
-	int moveIndex = 0, x = 0, y = 0;
-
-	initialise(board);
-	showInstructions();
-
-	// Keep playing till the game is over or it is a draw 
-	while (gameOver(board) == false && moveIndex != SIDE * SIDE)
-	{
-		int n;
-		if (whoseTurn == COMPUTER)
-		{
-			n = bestMove(board, moveIndex);
-			x = n / SIDE;
-			y = n % SIDE;
-			board[x][y] = COMPUTERMOVE;
-			printf("COMPUTER has put a %c in cell %d\n\n", COMPUTERMOVE, n + 1);
-			showBoard(board);
-			moveIndex++;
-			whoseTurn = HUMAN;
-		}
-
-		else if (whoseTurn == HUMAN)
-		{
-			printf("You can insert in the following positions : ");
-			for (int i = 0; i < SIDE; i++)
-				for (int j = 0; j < SIDE; j++)
-					if (board[i][j] == ' ')
-						printf("%d ", (i * 3 + j) + 1);
-			printf("\n\nEnter the position = ");
-			scanf_s("%d", &n);
-			n--;
-			x = n / SIDE;
-			y = n % SIDE;
-			if (board[x][y] == ' ' && n < 9 && n >= 0)
-			{
-				board[x][y] = HUMANMOVE;
-				printf("\nHUMAN has put a %c in cell %d\n\n", HUMANMOVE, n + 1);
-				showBoard(board);
-				moveIndex++;
-				whoseTurn = COMPUTER;
-			}
-			else if (board[x][y] != ' ' && n < 9 && n >= 0)
-			{
-				printf("\nPosition is occupied, select any one place from the available places\n\n");
-			}
-			else if (n < 0 || n>8)
-			{
-				printf("Invalid position\n");
-			}
-		}
-	}
-
-	// If the game has drawn 
-	if (gameOver(board) == false && moveIndex == SIDE * SIDE)
-		printf("It's a draw\n");
-	else
-	{
-		// Toggling the user to declare the actual winner 
-		if (whoseTurn == COMPUTER)
-			whoseTurn = HUMAN;
-		else if (whoseTurn == HUMAN)
-			whoseTurn = COMPUTER;
-
-		declareWinner(whoseTurn);
-	}
-}
-
-int main()
-{
-	printf("\n-------------------------------------------------------------------\n\n");
-	printf("\t\t\t Tic-Tac-Toe\n");
-	printf("\n-------------------------------------------------------------------\n\n");
-	char cont = 'y';
-	do {
-		char choice;
-		printf("Do you want to start first?(y/n) : ");
-		scanf_s(" %c", &choice);
-
-		if (choice == 'n')
-			playTicTacToe(COMPUTER);
-		else if (choice == 'y')
-			playTicTacToe(HUMAN);
-		else
-			printf("Invalid choice\n");
-
-		printf("\nDo you want to quit(y/n) : ");
-		scanf_s(" %c", &cont);
-	} while (cont == 'n');
-	return (0);
-}
