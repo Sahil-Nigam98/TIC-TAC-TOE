@@ -284,7 +284,7 @@ int main()
 	do {
 		char choice;
 		printf("Do you want to start first?(y/n) : ");
-		scanf_s(" %c", &choice);
+		scanf_s(" %c ", &choice);
 
 		if (choice == 'n')
 			playTicTacToe(COMPUTER);
@@ -294,7 +294,7 @@ int main()
 			printf("Invalid choice\n");
 
 		printf("\nDo you want to quit(y/n) : ");
-		scanf_s(" %c", &cont);
+		scanf_s(" %c ", &cont);
 	} while (cont == 'n');
 	return (0);
 }
